@@ -1,65 +1,27 @@
-import React, { Component } from 'react';
+import React, { Component,useState ,useEffect } from 'react';
 import './app.css';
-import Habits from './components/habits';
-import Navbar from './components/navbar';
+import VideoList from './components/video_list/video_list';
 
-class App extends Component {
-  state = {
-    habits: [
-      { id: 1, name: 'Reading', count: 0 },
-      { id: 2, name: 'Running', count: 0 },
-      { id: 3, name: 'Coding', count: 0 },
-    ],
-  };
-
-  handleIncrement = habit => {
-    const habits = this.state.habits.map(item => {
-      if (item.id === habit.id) {
-        return { ...habit, count: habit.count + 1 };
-      }
-      return item;
-    });
-    this.setState({ habits });
-  };
-
-  handleDecrement = habit => {
-    const habits = this.state.habits.map(item => {
-      if (item.id === habit.id) {
-        const count = habit.count - 1;
-        return { ...habit, count: count < 0 ? 0 : count };
-      }
-      return item;
-    });
-    this.setState({ habits });
-  };
-
-  handleDelete = habit => {
-    const habits = this.state.habits.filter(item => item.id !== habit.id);
-    this.setState({ habits });
-  };
-
-  handleAdd = name => {
-    const habits = [...this.state.habits, { id: Date.now(), name, count: 0 }];
-    this.setState({ habits });
-  };
-
-  handleReset = () => {
-    const habits = this.state.habits.map(habit => {
-      if (habit.count !== 0) {
-        return { ...habit, count: 0 };
-      }
-      return habit;
-    });
-    this.setState({ habits });
-  };
-
-  render() {
-    return (
-      <div>
-        앱 제작 시작
-      </div>
-    );
-  }
-}
+const App = (props) => {
+  const [videos, setVideos] = useState([]);
+  useEffect(()=>{
+    const requestOptions ={
+      method:'GET',
+      redirect:'follow'
+    };
+    fetch(
+      'https://www.googleapis.com/youtube/v3/search?q=bts&part=snippet&maxResults=25&key=AIzaSyCkgJsSX6Ii4TUZJzSDM6l7rrrOCB1cH5U',
+      requestOptions
+    )
+    .then(response => response.json())
+    .then(result => setVideos(result.items))
+    .catch(error => console.log(error,'error'))
+  },[])
+  return (
+    <>
+    <VideoList videos={videos}/>
+    </>
+  )
+};
 
 export default App;
