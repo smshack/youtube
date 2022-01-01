@@ -19,3 +19,8 @@ dependency injection
 ```
 
 6. config key 데이터 env 파일로 분리하기
+
+
+7. 유투브 플레이어 사용
+
+8. fecth와 axios 사용
